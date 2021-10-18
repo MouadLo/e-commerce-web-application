@@ -1,0 +1,29 @@
+{
+	"name": "Corniche-Market-Store",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"server": "nodemon backend/server",
+		"client": "yarn --cwd ./frontend run start",
+		"dev": "concurrently \"npm run server\" \"npm run client\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MouadLo/e-commerce-web-application.git"
+	},
+	"keywords": [],
+	"author": "Mouad Lousimi",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/MouadLo/e-commerce-web-application/issues"
+	},
+	"homepage": "https://github.com/MouadLo/e-commerce-web-application#readme",
+	"devDependencies": {
+		"concurrently": "^6.3.0",
+		"nodemon": "^2.0.13"
+	},
+	"dependencies": {
+		"express": "^4.17.1"
+	}
+}
