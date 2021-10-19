@@ -1,28 +1,32 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
 import { Link } from 'react-router-dom';
 import { Row, Col, Image, ListGroup, Card, Button } from 'react-bootstrap';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
 import Rating from '../components/Rating';
+import { listProductDetails } from '../actions/productActions';
+import Loader from '../components/Loader';
+import Message from '../components/Message';
 
 const ProductScreen = ({ match }) => {
-	const [product, setProduct] = useState(null);
+	const dispatch = useDispatch();
 
 	useEffect(async () => {
-		const fetchProduct = async () => {
-			const { data } = await axios.get(`/api/products/${match.params.id}`);
-			console.log(data);
-			setProduct(data);
-		};
-		fetchProduct();
-	}, []);
+		dispatch(listProductDetails(match.params.id));
+	}, [dispatch, match]);
+
+	const productDetails = useSelector((state) => state.productDetails);
+	const { loading, error, product } = productDetails;
 
 	return (
 		<>
 			<Link className="btn btn-dark my-3" to="/">
 				<i className="fas fa-arrow-left"></i> Go Back
 			</Link>
-			{product ? (
+			{loading ? (
+				<Loader />
+			) : error ? (
+				<Message variant="danger">{error}</Message>
+			) : (
 				<Row>
 					<Col md={6}>
 						<Image src={product.image} alt={product.name} fluid />
@@ -78,8 +82,6 @@ const ProductScreen = ({ match }) => {
 						</Card>
 					</Col>
 				</Row>
-			) : (
-				<div>Product doesn't exist</div>
 			)}
 		</>
 	);
