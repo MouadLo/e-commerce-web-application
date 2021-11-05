@@ -7,6 +7,7 @@ import CartScreen from './screens/CartScreen';
 import HomeScreen from './screens/HomeScreen';
 import LoginScreen from './screens/LoginScreen';
 import ProductScreen from './screens/ProductScreen';
+import ProfileScreen from './screens/ProfileScreen';
 import RegisterScreen from './screens/RegisterScreen';
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
 					<Route path="/cart/:id?" component={CartScreen} />
 					<Route path="/login" component={LoginScreen} />
 					<Route path="/register" component={RegisterScreen} />
+					<Route path="/profile" component={ProfileScreen} />
 				</Container>
 			</main>
 			<Footer />
