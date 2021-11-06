@@ -5,6 +5,7 @@
 	"main": "index.js",
 	"type": "module",
 	"scripts": {
+		"start": "node backend/server",
 		"server": "nodemon backend/server",
 		"client": "yarn --cwd ./frontend run start",
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
