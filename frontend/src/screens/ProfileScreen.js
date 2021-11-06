@@ -4,7 +4,7 @@ import { Form, Row, Col, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import Message from '../components/Message';
 import Loader from '../components/Loader';
-import { getUserDetails } from '../actions/userActions';
+import { getUserDetails, updateUserProfile } from '../actions/userActions';
 
 function ProfileScreen({ location, history }) {
 	const [name, setName] = useState('');
@@ -16,10 +16,13 @@ function ProfileScreen({ location, history }) {
 	const dispatch = useDispatch();
 
 	const userDetails = useSelector((state) => state.userDetails);
-	const { loading, error, user } = userDetails;
+	const { user } = userDetails;
 
 	const userLogin = useSelector((state) => state.userLogin);
 	const { userInfo } = userLogin;
+
+	const userUpdateProfile = useSelector((state) => state.userUpdateProfile);
+	const { loading, error, success } = userUpdateProfile;
 
 	useEffect(() => {
 		if (!userInfo) {
@@ -39,7 +42,7 @@ function ProfileScreen({ location, history }) {
 		if (password !== confirmPassword) {
 			setMessage('Passwords do not match confirm password');
 		} else {
-			// Dispatch update profile
+			dispatch(updateUserProfile({ id: user._id, name, email, password }));
 		}
 	};
 
@@ -47,6 +50,9 @@ function ProfileScreen({ location, history }) {
 		<Row>
 			<Col md={3}>
 				<h2>User Profile</h2>
+				{success && (
+					<Message variant="success">Profile updated successfully </Message>
+				)}
 				{message && <Message variant="danger">{message}</Message>}
 				{error && <Message variant="danger">{error}</Message>}
 				{loading && <Loader />}
