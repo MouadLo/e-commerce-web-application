@@ -24,9 +24,9 @@ const __dirname = path.resolve();
 
 if (process.env.NODE_ENV === 'production') {
 	app.use(express.static(path.join(__dirname, '/frontend/build')));
-	app.get('*', (req, res) =>
-		res.sendFile(__dirname, 'frontend', 'build', 'index.html')
-	);
+	app.get('*', (req, res) => {
+		res.sendFile(path.join(__dirname + '/frontend/build/index.html'));
+	});
 } else {
 	app.get('/', (req, res) => {
 		res.send('API is running...');
