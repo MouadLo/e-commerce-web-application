@@ -14,7 +14,7 @@ const PlaceOrderScreen = ({ history }) => {
 	const orderCreate = useSelector((state) => state.orderCreate);
 	const { error, success, loading, order } = orderCreate;
 
-	// Calculate princes
+	// Calculate prices
 	const addDecimals = (num) => {
 		return (Math.round(num * 100) / 100).toFixed(2);
 	};
@@ -67,7 +67,7 @@ const PlaceOrderScreen = ({ history }) => {
 						<ListGroup.Item>
 							<h2>Payment Method</h2>
 							<strong>Method: </strong>
-							{cart.paymentAddress}
+							{cart.paymentMethod}
 						</ListGroup.Item>
 
 						<ListGroup.Item>
