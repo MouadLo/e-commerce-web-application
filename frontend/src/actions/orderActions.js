@@ -40,7 +40,7 @@ export const addOrder = (order) => async (dispatch, getState) => {
 	}
 };
 
-export const getOrderById = (orderId) => async (dispatch, getState) => {
+export const getOrderDetails = (orderId) => async (dispatch, getState) => {
 	try {
 		dispatch({ type: ORDER_DETAILS_REQUEST });
 
@@ -93,7 +93,7 @@ export const payOrder =
 				paymentResult,
 				config
 			);
-
+			console.log(data);
 			dispatch({ type: ORDER_PAY_SUCCESS, payload: data });
 			//localStorage.setItem('userInfo', JSON.stringify(data));
 		} catch (error) {

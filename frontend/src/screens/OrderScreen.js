@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import ReactDOM from 'react-dom';
 import { Link } from 'react-router-dom';
 import {
 	Row,
@@ -9,16 +11,24 @@ import {
 	Button,
 	Form,
 } from 'react-bootstrap';
+import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useDispatch, useSelector } from 'react-redux';
-import { getOrderById } from '../actions/orderActions';
+import { getOrderDetails, payOrder } from '../actions/orderActions';
+import { ORDER_PAY_RESET } from '../constants/orderContants';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
 const OrderScreen = ({ match, history }) => {
+	const orderId = match.params.id;
+	const [sdkReady, setSdkReady] = useState(false);
+	const [clientId, setClientId] = useState('');
 	const dispatch = useDispatch();
 
 	const orderDetails = useSelector((state) => state.orderDetails);
 	const { loading, error, order } = orderDetails;
+
+	const orderPay = useSelector((state) => state.orderPay);
+	const { loading: loadingPay, success: successPay } = orderPay;
 
 	if (!loading && !error) {
 		const addDecimals = (num) => {
@@ -29,11 +39,36 @@ const OrderScreen = ({ match, history }) => {
 		);
 	}
 
-	const orderId = match.params.id;
 	useEffect(async () => {
-		dispatch(getOrderById(orderId));
-	}, [dispatch, orderId]);
+		const { data: clientId } = await axios.get('/api/config/paypal');
+		setClientId(clientId);
+		if (!order || successPay) {
+			dispatch({ type: ORDER_PAY_RESET });
+			dispatch(getOrderDetails(orderId));
+		}
+	}, [dispatch, orderId, successPay, order]);
 
+	const createOrder = (data, actions) => {
+		console.log(data);
+		return actions.order.create({
+			purchase_units: [
+				{
+					amount: {
+						value: order.totalPrice,
+					},
+				},
+			],
+		});
+	};
+
+	const onApprove = (data, actions) => {
+		console.log(data);
+		return actions.order.capture().then(function (details) {
+			// This function shows a transaction success message to your buyer.
+			console.log(details);
+			dispatch(payOrder(orderId, details));
+		});
+	};
 	return (
 		<>
 			{loading ? (
@@ -146,6 +181,27 @@ const OrderScreen = ({ match, history }) => {
 											<Col>$ {order.totalPrice}</Col>
 										</Row>
 									</ListGroup.Item>
+									{!order.isPaid && (
+										<ListGroup.Item>
+											{loadingPay && <Loader />}
+											{
+												<PayPalScriptProvider
+													options={{
+														'client-id': clientId,
+													}}
+												>
+													<PayPalButtons
+														createOrder={(data, actions) =>
+															createOrder(data, actions)
+														}
+														onApprove={(data, actions) =>
+															onApprove(data, actions)
+														}
+													/>
+												</PayPalScriptProvider>
+											}
+										</ListGroup.Item>
+									)}
 								</ListGroup>
 							</Card>
 						</Col>
