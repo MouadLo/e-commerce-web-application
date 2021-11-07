@@ -20,7 +20,7 @@ import Message from '../components/Message';
 
 const OrderScreen = ({ match, history }) => {
 	const orderId = match.params.id;
-	const [sdkReady, setSdkReady] = useState(false);
+
 	const [clientId, setClientId] = useState('');
 	const dispatch = useDispatch();
 
@@ -42,11 +42,13 @@ const OrderScreen = ({ match, history }) => {
 	useEffect(async () => {
 		const { data: clientId } = await axios.get('/api/config/paypal');
 		setClientId(clientId);
-		if (!order || successPay) {
+		if (successPay) {
 			dispatch({ type: ORDER_PAY_RESET });
 			dispatch(getOrderDetails(orderId));
+		} else {
+			dispatch(getOrderDetails(orderId));
 		}
-	}, [dispatch, orderId, successPay, order]);
+	}, [dispatch, orderId, successPay]);
 
 	const createOrder = (data, actions) => {
 		console.log(data);
@@ -65,7 +67,7 @@ const OrderScreen = ({ match, history }) => {
 		console.log(data);
 		return actions.order.capture().then(function (details) {
 			// This function shows a transaction success message to your buyer.
-			console.log(details);
+
 			dispatch(payOrder(orderId, details));
 		});
 	};
