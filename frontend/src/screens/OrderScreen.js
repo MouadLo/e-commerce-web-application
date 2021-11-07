@@ -29,9 +29,11 @@ const OrderScreen = ({ match, history }) => {
 		);
 	}
 
+	const orderId = match.params.id;
 	useEffect(async () => {
-		dispatch(getOrderById(match.params.id));
-	}, [dispatch, match]);
+		dispatch(getOrderById(orderId));
+	}, [dispatch, orderId]);
+
 	return (
 		<>
 			{loading ? (
