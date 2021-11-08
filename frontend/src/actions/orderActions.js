@@ -158,7 +158,7 @@ export const listOrders = () => async (dispatch, getState) => {
 		};
 
 		const { data } = await axios.get(`/api/orders`, config);
-		console.log(data);
+
 		dispatch({ type: ORDER_LIST_SUCCESS, payload: data });
 
 		//localStorage.setItem('userInfo', JSON.stringify(data));
