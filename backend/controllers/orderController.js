@@ -88,3 +88,17 @@ export const getMyOrders = asyncHandler(async (req, res) => {
 		throw new Error('No orders found');
 	}
 });
+
+// @desc Get all orders
+// @route GET /api/orders
+// @access Private/admin
+export const getOrders = asyncHandler(async (req, res) => {
+	const orders = await Order.find({});
+
+	if (orders.length > 0) {
+		res.json(orders);
+	} else {
+		res.status(404);
+		throw new Error('No orders found');
+	}
+});
