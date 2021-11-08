@@ -14,7 +14,7 @@ const HomeScreen = () => {
 
 	useEffect(async () => {
 		dispatch(listProduct());
-	}, [dispatch]);
+	}, []);
 
 	return (
 		<>
