@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { Form, Row, Col, Button, Table } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
@@ -44,7 +43,7 @@ function ProfileScreen({ location, history }) {
 				dispatch(listMyOrders());
 			}
 		}
-	}, [history, dispatch, userInfo, user]);
+	}, [history, dispatch, userInfo, user, success]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();

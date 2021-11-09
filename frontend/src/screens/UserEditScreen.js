@@ -37,7 +37,7 @@ function UserEditScreen({ location, match, history }) {
 			setEmail(user.email);
 			setIsAdmin(user.isAdmin);
 		}
-	}, [dispatch, userId, user]);
+	}, [dispatch, userId, user, successUpdate]);
 
 	const submitHandler = (e) => {
 		e.preventDefault();
