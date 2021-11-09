@@ -13,8 +13,15 @@ import {
 } from 'react-bootstrap';
 import { PayPalScriptProvider, PayPalButtons } from '@paypal/react-paypal-js';
 import { useDispatch, useSelector } from 'react-redux';
-import { getOrderDetails, payOrder } from '../actions/orderActions';
-import { ORDER_PAY_RESET } from '../constants/orderContants';
+import {
+	deliverOrder,
+	getOrderDetails,
+	payOrder,
+} from '../actions/orderActions';
+import {
+	ORDER_PAY_RESET,
+	ORDER_DELIVER_RESET,
+} from '../constants/orderContants';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 
@@ -30,6 +37,12 @@ const OrderScreen = ({ match, history }) => {
 	const orderPay = useSelector((state) => state.orderPay);
 	const { loading: loadingPay, success: successPay } = orderPay;
 
+	const orderDeliver = useSelector((state) => state.orderDeliver);
+	const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
+
+	const userLogin = useSelector((state) => state.userLogin);
+	const { userInfo } = userLogin;
+
 	if (!loading && !error) {
 		const addDecimals = (num) => {
 			return (Math.round(num * 100) / 100).toFixed(2);
@@ -42,13 +55,17 @@ const OrderScreen = ({ match, history }) => {
 	useEffect(async () => {
 		const { data: clientId } = await axios.get('/api/config/paypal');
 		setClientId(clientId);
-		if (successPay) {
+		if (!userInfo) {
+			history.push('/login');
+		}
+		if (!order || successPay || successDeliver) {
 			dispatch({ type: ORDER_PAY_RESET });
+			dispatch({ type: ORDER_DELIVER_RESET });
 			dispatch(getOrderDetails(orderId));
 		} else {
 			dispatch(getOrderDetails(orderId));
 		}
-	}, [dispatch, orderId, successPay]);
+	}, [dispatch, orderId, successPay, successDeliver]);
 
 	const createOrder = (data, actions) => {
 		console.log(data);
@@ -70,6 +87,10 @@ const OrderScreen = ({ match, history }) => {
 
 			dispatch(payOrder(orderId, details));
 		});
+	};
+
+	const deliverHandler = () => {
+		dispatch(deliverOrder(orderId));
 	};
 	return (
 		<>
@@ -204,6 +225,20 @@ const OrderScreen = ({ match, history }) => {
 											}
 										</ListGroup.Item>
 									)}
+									{userInfo &&
+										userInfo.isAdmin &&
+										order.isPaid &&
+										!order.isDelivered && (
+											<ListGroup.Item>
+												<Button
+													type="button"
+													className="btn btn-block"
+													onClick={deliverHandler}
+												>
+													Mark As Delivered
+												</Button>
+											</ListGroup.Item>
+										)}
 								</ListGroup>
 							</Card>
 						</Col>
