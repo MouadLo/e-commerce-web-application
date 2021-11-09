@@ -93,7 +93,7 @@ export const getMyOrders = asyncHandler(async (req, res) => {
 // @route GET /api/orders
 // @access Private/admin
 export const getOrders = asyncHandler(async (req, res) => {
-	const orders = await Order.find({});
+	const orders = await Order.find({}).populate('user', 'name email');
 
 	if (orders.length > 0) {
 		res.json(orders);

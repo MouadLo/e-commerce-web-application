@@ -12,6 +12,7 @@ import { PRODUCT_CREATE_RESET } from '../constants/productConstants';
 import Loader from '../components/Loader';
 import Message from '../components/Message';
 import Paginate from '../components/Paginate';
+import { Link } from 'react-router-dom';
 
 const ProductListScreen = ({ history, match }) => {
 	const pageNumber = match.params.pageNumber;
@@ -105,7 +106,9 @@ const ProductListScreen = ({ history, match }) => {
 						<tbody>
 							{products.map((product, index) => (
 								<tr key={index}>
-									<td>{product._id}</td>
+									<td>
+										<Link to={`/product/${product._id}`}>{product._id}</Link>
+									</td>
 									<td>{product.name}</td>
 									<td>$ {product.price}</td>
 									<td>{product.category}</td>
