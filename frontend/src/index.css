@@ -33,7 +33,6 @@ h2 {
 .carousel-item-prev,
 .carousel-item.active {
 	display: flex;
-	background-color: #131921;
 }
 
 .carousel-caption {
@@ -42,7 +41,7 @@ h2 {
 }
 
 .carousel-caption h2 {
-	color: #ff9900;
+	color: #fff;
 }
 
 .carousel img {

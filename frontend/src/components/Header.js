@@ -18,7 +18,7 @@ const Header = () => {
 		history.push('/');
 	};
 	return (
-		<header>
+		<header style={{ marginBottom: '25px' }}>
 			<Navbar bg="dark" variant="dark" expand="md" collapseOnSelect>
 				<Container>
 					<LinkContainer to="/">
