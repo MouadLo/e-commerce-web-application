@@ -1,4 +1,4 @@
-# e-commerce
+# E-commerce
 URL: https://lsmarket.herokuapp.com
 ## web application using this technology:
 Frontend: 
